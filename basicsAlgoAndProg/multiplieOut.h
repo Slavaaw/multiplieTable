@@ -2,20 +2,26 @@
 #include <iostream>
 #include <string>
 
+
+/*Как работает программа:
+* ...
+*/
+
 using namespace std;
 class multiplieOut
 {
 public:
-	int printSpace(int space, string str);
-	void printVal(int val);
-	int spaceCalc(int lspace, int val, int rspace);
-	void printLineBarr();
-	void printStartVal();
+	multiplieOut(int rangeX, int rangeY);
 	void output();
-private:
-	string barrierY = "|";
-	string barrierX = "-";
-	string str;
-	int lspace = 2, rspace = 2, value;
-};
 
+private:
+	string barrierX, barrierY, lineBar, header;
+	int coloumnCount, rowsCount, cellLength, lspace, rspace, value, total_spaces; // длина ячейки с пробелами и т.д.
+	void setLineBar();
+	void printLineBar() const;
+	void printVal(int val);
+	int lengthCalc(int) const;
+	void setSpaces(int);
+	void setHeader();
+	void printHeader() const;
+};

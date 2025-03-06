@@ -1,61 +1,68 @@
 #include "multiplieOut.h"
-int multiplieOut::printSpace(int space, string str) { return lspace + value + rspace; }
-void multiplieOut::printVal(int val){ 
-	if (to_string(val).length() > 1) { 
-		lspace = 1; 
-		if (to_string(val).length() == 3) { rspace = 1; }
+
+multiplieOut::multiplieOut(int rangeX, int rangeY) : header(""), barrierY("|"), lineBar(""), coloumnCount(0), rowsCount(0), cellLength(5), lspace(2), rspace(2), value(0), total_spaces(0) {
+	
+	if (rangeX <= 100 and rangeY <= 100) {
+		coloumnCount = rangeX;
+		rowsCount = rangeY;
+
+	setLineBar();
+	printLineBar();
+	setHeader();
+	printHeader();
+	printLineBar();
 	}
-	else { lspace = 2; }
+	else { cout << "Слишком большие размеры! Максимольно допустимые значения: 100 на 100" << endl; }
+}
+
+void multiplieOut::printVal(int val){ 
+	setSpaces(val);
 	cout << barrierY << string(lspace, ' ') << val << string(rspace, ' '); 
 }
-int multiplieOut::spaceCalc(int lspace, int val, int rspace){ return lspace + val + rspace; }
-void multiplieOut::printLineBarr() {
-	for (int i = 1; i < 2; i++) {
-		for (int j = 2; j <= 11; j++) {
-			int value = i * j;
-			if (to_string(value).length() > 1) lspace = 1;
-			else lspace = 2;
+int multiplieOut::lengthCalc(int val) const{ return to_string(val).length(); }
 
-			str += barrierY + string(spaceCalc(rspace, to_string(value).length(), lspace), '-');
-		}
+void multiplieOut::setLineBar() {
+	int counter = 0;
+	while (counter != coloumnCount) {
+		lineBar += barrierY + string(cellLength, '-');
+		counter++;
 	}
-	str += barrierY;
+	lineBar += barrierY;
 }
 
-void multiplieOut::printStartVal() {
-	cout << str << endl;
-	for (int i = 1; i <= 10; i++) {
-		
-		if (to_string(i).length() == 2) lspace = 1;
-		else lspace = 2;
-		if (i > 1) printVal(i);
-		else cout << barrierY << string(lspace, ' ') << " " << string(rspace, ' ');
-	}
-	cout << "|" << endl;
+void multiplieOut::printLineBar() const { cout << lineBar << endl; }
+
+void multiplieOut::setSpaces(int val) {
+	total_spaces = cellLength - lengthCalc(val);
+	lspace = total_spaces / 2;
+	rspace = total_spaces - lspace;
 }
 
+void multiplieOut::setHeader() {
+	header += barrierY + string(cellLength, ' ');
+	for (int counter = 2; counter <= coloumnCount; counter++) {
+		setSpaces(counter);
+		header += barrierY + string(lspace, ' ') + to_string(counter) + string(rspace, ' ');
+	}
+	header += barrierY;
+}
+
+void multiplieOut::printHeader() const { cout << header << endl; }
 
 void multiplieOut::output() {
-	setlocale(LC_ALL, "RU");
-	printLineBarr();
-	printStartVal();
 
-	for (int i = 2; i <= 10; i++) {
-		cout << str << endl;
+	for (int i = 2; i <= rowsCount; i++) {
+		
 		printVal(i);
-		for (int j = 2; j <= 10; j++) {
-			int value = i * j;
-			if (to_string(value).length() > 1) lspace = 1;
-			/*if (to_string(value).length() == 3) rspace = 1;*/
-			else lspace = 2;
-			/*cout << "to_string(value).length(): " << to_string(value).length();*/
-			
+
+		for (int j = 2; j <= coloumnCount; j++) {
+			value = i * j;
 			printVal(value);
-
 		}
-
 		cout << "|" << endl;
+		printLineBar();
+
+		
 
 	}
-	cout << str;
 }
